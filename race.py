@@ -245,6 +245,8 @@ if __name__ == "__main__":
             )
     args = parser.parse_args()
 
+    model = Model(args)
+
     early_stop_callback = EarlyStopping(
             monitor="val_loss",
             min_delta=0.0,
@@ -261,4 +263,4 @@ if __name__ == "__main__":
              # max_nb_epochs=1
              )
 
-    trainer.fit(Model(args))
+    trainer.fit(model)
