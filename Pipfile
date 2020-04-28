@@ -11,7 +11,9 @@ ipython = "*"
 [packages]
 pytorch-lightning = {git = "https://github.com/williamFalcon/pytorch-lightning.git"}
 lineflow = "*"
-transformers = "*"
+transformers = "2.6.0"
+pytorch-lightning
+torch = "1.5.0"
 
 [requires]
 python_version = "3.6"
