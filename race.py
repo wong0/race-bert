@@ -13,7 +13,7 @@ from pytorch_lightning.callbacks import EarlyStopping
 import torch
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
 
-use_cuda = true
+use_cuda = True
 
 if use_cuda and torch.cuda.is_available():
     net.cuda()
