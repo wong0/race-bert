@@ -261,6 +261,4 @@ if __name__ == "__main__":
              # max_nb_epochs=1
              )
 
-    model = Model(args)
-
-    trainer.fit(model)
+    trainer.fit(Model(args))
