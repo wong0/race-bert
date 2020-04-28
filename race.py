@@ -6,13 +6,17 @@ from collections import OrderedDict
 from argparse import ArgumentParser
 
 import lineflow as lf
-from transformers import BertForMultipleChoice, BertTokenizer, AdamW
+from transformers import BertTokenizer, AdamW, BertForMultipleChoice
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import EarlyStopping
 
 import torch
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
 
+use_cuda = true
+
+if use_cuda and torch.cuda.is_available():
+    net.cuda()
 
 MAX_LEN = 128
 NUM_LABELS = 4
