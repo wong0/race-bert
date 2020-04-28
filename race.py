@@ -191,6 +191,9 @@ class Model(pl.LightningModule):
 
         return output
 
+    def forward(self, input):
+        
+
     def validation_step(self, batch, batch_idx):
         labels = batch["label"]
         input_ids = batch["input_ids"]
