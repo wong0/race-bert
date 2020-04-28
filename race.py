@@ -13,10 +13,11 @@ from pytorch_lightning.callbacks import EarlyStopping
 import torch
 from torch.utils.data import DataLoader, SequentialSampler, RandomSampler
 
+# Enable GPU
+import torch
 use_cuda = True
-
 if use_cuda and torch.cuda.is_available():
-    net.cuda()
+  net.cuda()
 
 MAX_LEN = 128
 NUM_LABELS = 4
@@ -253,7 +254,7 @@ if __name__ == "__main__":
             )
 
     trainer = pl.Trainer(
-             gpus=1,
+             gpus=0,
              early_stop_callback=early_stop_callback,
              # train_percent_check=0.001,
              # val_percent_check=0.001,
