@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 
 import lineflow as lf
 from transformers import BertTokenizer, AdamW, BertForMultipleChoice
-import pytorch_lightning as pl
+import pytorch-lightning as pl
 from pytorch_lightning.callbacks import EarlyStopping
 
 import torch
