@@ -57,21 +57,32 @@ def preprocess(tokenizer: BertTokenizer, x: Dict) -> Dict:
         else:
             text_b = x["question"] + " " + option
 
+        # 1) tokenize a raw text, 
+        # 2) replace tokens with corresponding ids, 
+        # 3) insert special tokens for BERT. 
+        # Use BertTokenizer to encode (tokenize / indexize) two sentences.
         inputs = tokenizer.encode_plus(
                 text_a,
                 text_b,
                 add_special_tokens=True,
                 max_length=MAX_LEN
                 )
+
+        # Output of `tokenizer.encode_plus` is a dictionary.
         input_ids, token_type_ids = inputs["input_ids"], inputs["token_type_ids"]
+
+        # For BERT, we need `attention_mask` along with `input_ids` as input.
         attention_mask = [1] * len(input_ids)
 
+        # Pad sequences.
         pad_token_id = tokenizer.pad_token_id
         padding_length = MAX_LEN - len(input_ids)
+
         input_ids = input_ids + ([pad_token_id] * padding_length)
         attention_mask = attention_mask + ([0] * padding_length)
         token_type_ids = token_type_ids + ([pad_token_id] * padding_length)
 
+        # 
         assert len(input_ids) == MAX_LEN, "Error with input length {} vs {}".format(len(input_ids), MAX_LEN)
         assert len(attention_mask) == MAX_LEN, "Error with input length {} vs {}".format(len(attention_mask), MAX_LEN)
         assert len(token_type_ids) == MAX_LEN, "Error with input length {} vs {}".format(len(token_type_ids), MAX_LEN)
@@ -83,8 +94,11 @@ def preprocess(tokenizer: BertTokenizer, x: Dict) -> Dict:
             })
 
     labels = label_map.get(x["answer"], -1)
+
+    # Just a python list to `torch.tensor`
     label = torch.tensor(labels).long()
 
+    # What we return will one instance in batch which `LightningModule.train_step` receives.
     return {
             "id": x["id"],
             "label": label,
@@ -99,7 +113,10 @@ def get_dataloader(datadir: str, cachedir: str = "./"):
     cachedir = Path(cachedir)
     batch_size = 8
 
+    # create tokenizer
     tokenizer = BertTokenizer.from_pretrained("bert-base-uncased", do_lower_case=True)
+    
+    # The actual preprocessing is in this `preprocess` function.
     preprocessor = partial(preprocess, tokenizer)
 
     train_samples = []
@@ -107,6 +124,8 @@ def get_dataloader(datadir: str, cachedir: str = "./"):
         for _path in (datadir / "train" / grade).iterdir():
             train_samples.append(json.loads(_path.read_text()))
     train = raw_samples_to_dataset(train_samples)
+    
+    # Apply preprocessing and make pytorch dataloaders.
     train_dataloader = DataLoader(
             train.map(preprocessor).save(cachedir / "train.cache"),
             sampler=RandomSampler(train),
@@ -129,6 +148,8 @@ def get_dataloader(datadir: str, cachedir: str = "./"):
         for _path in (datadir / "test" / grade).iterdir():
             test_samples.append(json.loads(_path.read_text()))
     test = raw_samples_to_dataset(test_samples)
+
+    # Apply preprocessing and make pytorch dataloaders.
     test_dataloader = DataLoader(
             test.map(preprocessor).save(cachedir / "test.cache"),
             sampler=SequentialSampler(test),

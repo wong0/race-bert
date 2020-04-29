@@ -1,0 +1,28 @@
+# Function signatures
+
+def raw_samples_to_dataset(samples)
+
+def preprocess(tokenizer: BertTokenizer, x: Dict) -> Dict:
+
+def get_dataloader(datadir: str, cachedir: str = "./"):
+
+class Model(pl.LightningModule):
+
+    def configure_optimizers
+
+    def training_step(self, batch, batch_idx):
+
+    def forward(self, input_ids, token_type_ids=None, attention_mask=None, labels=None):
+
+    def validation_step(self, batch, batch_idx):
+
+    def validation_end(self, outputs):
+
+    @pl.data_loader
+    def train_dataloader(self):
+
+    @pl.data_loader
+    def val_dataloader(self):
+
+
+    Model fitted. 
